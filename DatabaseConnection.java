@@ -17,12 +17,12 @@ public class DatabaseConnection {
 
 	public DatabaseConnection(String username, String password) {
 		String connectionUrl =
-			"jdbc:sqlserver://uranium.cs.umanitoba.ca:1433;"
-			+ "database=cs3380;"
+			"jdbc:sqlserver://airbnb-db.InsertDNSEndpoint.rds.amazonaws.com:1433;"
+			+ "database=airbnb_db;"
 			+ "user=" + username + ";"
 			+ "password=" + password + ";"
-			+ "encrypt=false;"
-			+ "trustServerCertificate=false;"
+			+ "encrypt=true;"
+			+ "trustServerCertificate=true;"
 			+ "loginTimeout=30;";
 
 		try {
