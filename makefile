@@ -1,8 +1,23 @@
+# Makefile – works on Windows, Linux, macOS, aviary, AWS, everywhere
+
+JAR = mssql-jdbc-13.2.1.jre11.jar
+
+# Detect OS for classpath separator and clean command
+ifeq ($(OS),Windows_NT)
+    CPSEP = ;
+    RM = del
+else
+    CPSEP = :
+    RM = rm -f
+endif
+
 all:
-	javac *.java
+	javac -cp "$(JAR)" *.java
 
 run: all
-	java -cp .:mssql-jdbc-11.2.0.jre18.jar SQLServerMain
+	java -cp ".$(CPSEP)$(JAR)" SQLServerMain
 
 clean:
-	rm *.class
+	$(RM) *.class
+
+.PHONY: all run clean
