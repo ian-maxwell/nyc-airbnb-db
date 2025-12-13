@@ -1,6 +1,6 @@
-# 🗽 COMP 3380 – NYC Airbnb Database Project (University of Manitoba)
+# 🗽 NYC Airbnb Database Project
 
-This project features a persistent, full-stack application for querying and managing a PostgreSQL database containing New York City Airbnb data. The system is split into a Java-based backend and a Streamlit-based web frontend.
+This project features a persistent, full-stack application for querying and managing a **MSSQL\*\*** database containing New York City Airbnb data. The system is split into a Java-based backend and a Streamlit-based web frontend.
 
 ---
 
