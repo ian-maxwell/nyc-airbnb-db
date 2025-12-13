@@ -15,7 +15,7 @@ all:
 	javac -cp "$(JAR)" *.java
 
 run: all
-	java -cp ".$(CPSEP)$(JAR)" SQLServerMain
+	java -Xmx512m -cp ".$(CPSEP)$(JAR)" SQLServerMain
 
 clean:
 	$(RM) *.class

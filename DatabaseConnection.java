@@ -17,7 +17,7 @@ public class DatabaseConnection {
 
 	public DatabaseConnection(String username, String password) {
 		String connectionUrl =
-			"jdbc:sqlserver://airbnb-db.InsertDNSEndpoint.rds.amazonaws.com:1433;"
+			"jdbc:sqlserver://YOUR_AWS_ENDPOINT:1433;"
 			+ "database=airbnb_db;"
 			+ "user=" + username + ";"
 			+ "password=" + password + ";"
@@ -27,7 +27,6 @@ public class DatabaseConnection {
 
 		try {
 			connection = DriverManager.getConnection(connectionUrl);
-
 			header = "";
 			divider = "";
 			output = new ArrayList<>();
@@ -780,41 +779,43 @@ public class DatabaseConnection {
 		String filename = "AirbnbMSSQL.sql";
 
 		System.out.println("Repopulating the database...");
-		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-			String sql = "";
+		try (BufferedReader br = new BufferedReader(new FileReader(filename));
+			Statement statement = connection.createStatement()) {
+			connection.setAutoCommit(false);
+			StringBuilder sql = new StringBuilder();
 			String line;
+			
 			int lineNum = 1;
 
-			System.out.println("Reading the SQL file...");
+			System.out.println("Reading and Executing in batches...");
 			while ((line = br.readLine()) != null) {
-				if (lineNum % 10000 == 0) {
-					System.out.println(lineNum + " / " + "221202");
-				}
-
+				if (line.trim().isEmpty()) continue;
+				
+				sql.append(line).append(" ");
 				lineNum++;
-				sql += line;
-			}
-
-			System.out.println("Executing SQL...");
-			try (Statement statement = connection.createStatement()) {
-				connection.setAutoCommit(false);
-				statement.execute(sql);
-				connection.commit();
-				connection.setAutoCommit(true);
-
-				System.out.println("Database repopulated");
-			} catch (SQLException e) {
-				e.printStackTrace();
-
-				System.out.println("Error executing SQL file, rolling back...");
-				try {
-					connection.rollback();
-				} catch (SQLException e2) {
-					System.out.println("Error rolling back.");
+				if (lineNum % 1000 == 0) {
+					statement.execute(sql.toString());
+					connection.commit();
+					sql.setLength(0);
+					System.out.println("Processed " + lineNum + " / " + "221202");
 				}
 			}
-		} catch (IOException e) {
-			System.out.println("Error reading file.");
+			if (sql.length() > 0) {
+				statement.execute(sql.toString());
+				connection.commit();
+			}
+			connection.setAutoCommit(true);
+			System.out.println("Database repopulated successfully!");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			System.out.println("Error executing SQL file, rolling back...");
+			try {
+				connection.rollback();
+			} catch (Exception e2) {
+				System.out.println("Error rolling back.");
+			}
 		}
 	}
 }
