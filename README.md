@@ -54,7 +54,7 @@ You can run the Java console application or the Streamlit web application.
 
 ### B. Run Streamlit Web Console (Requires Python/Streamlit)
 
-1.  Ensure Python libraries are installed: `pip install streamlit` (and any other requirements you have).
+1.  Ensure Python libraries are installed: `pip install streamlit`
 2.  Run the secured dashboard file:
     ```bash
     streamlit run airbnb_dashboard_live.py
